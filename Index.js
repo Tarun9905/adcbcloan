@@ -304,7 +304,7 @@ app.get('/getTransaction/:accountNo', async (req, res) => {
 
 
 //post Beneficiary
-app.post('/addBeneficiary', async (req, res) => {
+app.post('/addBeneficiary/details', async (req, res) => {
   try {
     const { beneficiaryName, accountNoBeneficiary, ifscCode, userId } = req.body;
 
