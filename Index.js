@@ -313,7 +313,6 @@ app.post('/addBeneficiary', async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-
     // 3. Save
     const newBeneficiary = new BeneficiaryModel({
       beneficiaryName,

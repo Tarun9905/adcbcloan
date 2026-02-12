@@ -7,6 +7,6 @@ const BeneficiarySchema = mongoose.Schema({
     userId:{ type: String, required: true }
 })
 
-const BeneficiaryModel = mongoose.model('Beneficiary',BeneficiarySchema)
+const BeneficiaryModel = mongoose.model('BeneficiaryDetails',BeneficiarySchema)
 
 module.exports = BeneficiaryModel
