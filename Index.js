@@ -1,5 +1,5 @@
-const express =require('express');
-const cors =require('cors');
+const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const RegisterModel = require('./Models/RegisterModel');
 const FundsTransferModel = require('./Models/FundsTransferModel');
@@ -16,11 +16,11 @@ app.use(cors());
 const port = process.env.PORT || 3500;
 
 mongoose.connect('mongodb+srv://tarunrekandar992005_db_user:l0a5XlD1poYiLOqC@bankadcb.bo7yetb.mongodb.net/?appName=BankADCB')
-.then(()=>console.log('mongoose connected successfully'))
-.catch((err)=>console.log(err))
+  .then(() => console.log('mongoose connected successfully'))
+  .catch((err) => console.log(err))
 
-app.listen(port,()=>{
-    console.log(`Server running successfully in ${port} port`)
+app.listen(port, () => {
+  console.log(`Server running successfully in ${port} port`)
 });
 
 
@@ -135,30 +135,30 @@ app.post('/userRegister', async (req, res) => {
 //     }
 // });
 app.post('/userLogin', async (req, res) => {
-    try {
-        const { userId } = req.body;
+  try {
+    const { userId } = req.body;
 
-        if (!userId) {
-            return res.status(400).json({ message: 'UserId is required' });
-        }
-
-        const user = await RegisterModel.findOne({ userId });
-
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        // If userId exists → login success
-        res.status(200).json({
-            message: 'Login successful',
-            userName: user.userName,
-            userId: user.userId
-        });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+    if (!userId) {
+      return res.status(400).json({ message: 'UserId is required' });
     }
+
+    const user = await RegisterModel.findOne({ userId });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // If userId exists → login success
+    res.status(200).json({
+      message: 'Login successful',
+      userName: user.userName,
+      userId: user.userId
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 
@@ -313,11 +313,6 @@ app.post('/addBeneficiary', async (req, res) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // 2. Check duplicate beneficiary account
-    const existing = await BeneficiaryModel.findOne({ accountNoBeneficiary });
-    if (existing) {
-      return res.status(409).json({ message: 'Beneficiary already exists' });
-    }
 
     // 3. Save
     const newBeneficiary = new BeneficiaryModel({
@@ -335,7 +330,14 @@ app.post('/addBeneficiary', async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
+    console.log(error); // to see real error
+
+    if (error.code === 11000) {
+      return res.status(409).json({
+        message: 'This beneficiary account already exists for this user'
+      });
+    }
+
     res.status(500).json({ message: 'Server error' });
   }
 });
